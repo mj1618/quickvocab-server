@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+.env
+.idea/
+_ide_helper.php
+storage/aop/
+/package
+resources/views/vendor/
+basename.exe.stackdump
+public/plugins/
