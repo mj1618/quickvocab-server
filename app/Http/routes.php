@@ -89,14 +89,14 @@ function getRandomWord($npool,$lang='it'){
 $app->get('/api/word', function () use ($app) {
     $request = app(Request::class);
     $npool = $request->input('npool');
-    $lang = $request->input('lang','it');
+    $lang = $request->input('language','it');
     return getRandomWord($npool,$lang);
 });
 
 $app->get('/api/words', function () use ($app) {
     $request = app(Request::class);
     $npool = $request->input('npool');
-    $lang = $request->input('lang','it');
+    $lang = $request->input('language','it');
     $n = $request->input('nwords');
     $rs = [];
 
