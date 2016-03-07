@@ -24,7 +24,7 @@ function getRandomWord($npool,$lang='it'){
         $lang='it';
     }
     $rs =  DB::select("select * from (select * from ".$lang."_words limit :npool ) as s order by rand() limit 1",['npool'=>$npool]);
-    $word = $rs[0]->word;
+    $word = strtolower($rs[0]->word);
     $id = $rs[0]->id;
 
 
