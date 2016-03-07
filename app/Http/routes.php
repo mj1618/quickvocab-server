@@ -88,23 +88,22 @@ function getRandomWord($npool,$lang='it'){
 
 $app->get('/api/word', function () use ($app) {
     $request = app(Request::class);
-    $npool = $request->input('npool');
-    $lang = $request->input('language','it');
-    return getRandomWord($npool,$lang);
-});
-
-$app->get('/api/words', function () use ($app) {
-    $request = app(Request::class);
-    $npool = $request->input('npool');
-    $lang = $request->input('language','it');
     $n = $request->input('nwords');
-    $rs = [];
-
-    for($i=0;$i<$n;$i++){
-        $rs[] = getRandomWord($npool,$lang);
-    }
-
-    return $rs;
+    $lang = $request->input('language','it');
+    return getRandomWord($n,$lang);
 });
+
+// $app->get('/api/words', function () use ($app) {
+//     $request = app(Request::class);
+//     $lang = $request->input('language','it');
+//     $n = $request->input('nwords');
+//     $rs = [];
+
+//     for($i=0;$i<$n;$i++){
+//         $rs[] = getRandomWord($n,$lang);
+//     }
+
+//     return $rs;
+// });
 
 
