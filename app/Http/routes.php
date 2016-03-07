@@ -17,6 +17,7 @@ use App\EsWords;
 use App\FrWords;
 use App\DeWords;
 
+//trnsl.1.1.20160307T115612Z.028476d08a65d95d.a2bd8a81feaa0f2884ebc498c682dd40797534d1
 
 function getRandomWord($npool,$lang='it'){
 
@@ -50,9 +51,14 @@ function getRandomWord($npool,$lang='it'){
 
     $json = json_decode(file_get_contents('https://glosbe.com/gapi/translate?from='.$lang.'&dest=eng&format=json&phrase='.$word.'&pretty=true&tm=true'), true);
 
+    $yanex = json_decode(file_get_contents('https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160307T115612Z.028476d08a65d95d.a2bd8a81feaa0f2884ebc498c682dd40797534d1&text='.$word.'&lang='.$lang.'-en'));
+
     $defs=[];
     $ms=[];
     $exs = [];
+
+    if($yanex["text"] && strlen($yanex["text"])>0)
+        $defs[] = $yanex["text"];
 
     foreach($json["tuc"] as $t){
         if(isset($t["phrase"])){
