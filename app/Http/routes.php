@@ -83,6 +83,7 @@ function getRandomWord($npool,$lang='it'){
     }
 
     $r = [
+	'language'=>$lang,
         'word'=>$word,
         'translations'=>$defs,
         'meanings'=>$ms,
