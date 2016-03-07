@@ -57,8 +57,8 @@ function getRandomWord($npool,$lang='it'){
     $ms=[];
     $exs = [];
 
-    if($yanex["text"] && strlen($yanex["text"])>0)
-        $defs[] = $yanex["text"];
+    if($yanex->text && strlen($yanex->text)>0)
+        $defs[] = $yanex->text;
 
     foreach($json["tuc"] as $t){
         if(isset($t["phrase"])){
