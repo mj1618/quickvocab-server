@@ -63,7 +63,7 @@ function getRandomWord($npool,$lang='it'){
                 $defs[] = $t;
 
     foreach($json["tuc"] as $t){
-        if(isset($t["phrase"])){
+        if(isset($t["phrase"]) && in_array($t["phrase"]["text"],$defs)==false){
             $defs[] = $t["phrase"]["text"];
         }
         if(isset($t["meanings"])){
