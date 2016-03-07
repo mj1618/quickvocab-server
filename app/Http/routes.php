@@ -12,10 +12,43 @@
 */
 
 use Illuminate\Http\Request;
-function getRandomWord($npool){
-    $rs =  DB::select("select * from (select * from words limit :npool ) as s order by rand() limit 1",['npool'=>$npool]);
+use App\ItWords;
+use App\EsWords;
+use App\FrWords;
+use App\DeWords;
+
+
+function getRandomWord($npool,$lang='it'){
+
+    if(in_array($lang,['it','de','fr','es'])==false){
+        $lang='it';
+    }
+    $rs =  DB::select("select * from (select * from ".$lang."_words limit :npool ) as s order by rand() limit 1",['npool'=>$npool]);
     $word = $rs[0]->word;
-    $json = json_decode(file_get_contents('https://glosbe.com/gapi/translate?from=it&dest=eng&format=json&phrase='.$word.'&pretty=true&tm=true'), true);
+    $id = $rs[0]->id;
+
+
+    switch($lang){
+        case 'it':
+            $row = ItWords::find($id);
+            break;
+        case 'es':
+            $row = EsWords::find($id);
+            break;
+        case 'fr':
+            $row = FrWords::find($id);
+            break;
+        case 'de':
+            $row = DeWords::find($id);
+            break;
+    }
+
+    if($row->data !== null){
+        return (array) json_decode($row->data);
+    }
+
+
+    $json = json_decode(file_get_contents('https://glosbe.com/gapi/translate?from='.$lang.'&dest=eng&format=json&phrase='.$word.'&pretty=true&tm=true'), true);
 
     $defs=[];
     $ms=[];
@@ -47,7 +80,8 @@ function getRandomWord($npool){
         'meanings'=>$ms,
         'examples'=>$exs
     ];
-    \Cache::put($word,$r);
+    $row->data = json_encode($r);
+    $row->save();
     return $r;
 }
 
@@ -55,17 +89,19 @@ function getRandomWord($npool){
 $app->get('/api/word', function () use ($app) {
     $request = app(Request::class);
     $npool = $request->input('npool');
-    return getRandomWord($npool);
+    $lang = $request->input('lang','it');
+    return getRandomWord($npool,$lang);
 });
 
 $app->get('/api/words', function () use ($app) {
     $request = app(Request::class);
     $npool = $request->input('npool');
+    $lang = $request->input('lang','it');
     $n = $request->input('nwords');
     $rs = [];
 
     for($i=0;$i<$n;$i++){
-        $rs[] = getRandomWord($npool);
+        $rs[] = getRandomWord($npool,$lang);
     }
 
     return $rs;
